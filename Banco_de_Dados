@@ -1,0 +1,9 @@
+
+create table Dados(
+id int primary key not null auto_increment,
+nome varchar(60),
+email varchar(60),
+telefone varchar(11),
+sexo char(1));
+
+select * from Dados;
