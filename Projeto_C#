@@ -1,0 +1,140 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+
+
+namespace cadastro_Cliente
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        string strconn = "server=127.0.0.1; port=3306; UID=root; database=Cadastro_login; pwd=842508Erick#;";
+        
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(strconn);
+
+                conn.Open();
+
+                string sql = "INSERT INTO Dados (nome, email ,telefone, sexo)" +
+                     "VALUES (@nome, @email, @telefone, @sexo)";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+
+                    cmd.Parameters.AddWithValue("@nome", txtName.Text);
+                    cmd.Parameters.AddWithValue("@email", txtEmail.Text);
+                    cmd.Parameters.AddWithValue("@telefone", txtTelefone.Text);
+                    cmd.Parameters.AddWithValue("@sexo", cboSexo.SelectedItem.ToString());
+
+
+
+                    cmd.ExecuteNonQuery();
+
+                    conn.Close();
+
+                }
+
+            }
+
+            catch (Exception err)
+            {
+
+                MessageBox.Show(err.Message);
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(strconn);
+
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("delete from Dados where id='" + txtID.Text + "'", conn);
+                cmd.ExecuteNonQuery();
+
+                conn.Close();
+            }
+
+            catch (Exception err)
+            {
+
+                MessageBox.Show(err.Message);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(strconn);
+
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("update Dados set nome='" + txtName.Text + "', email='" + txtEmail.Text + "' where id='" + txtID.Text + "';", conn);
+                cmd.ExecuteNonQuery();
+
+                conn.Close();
+            }
+
+            catch (Exception err)
+            {
+
+                MessageBox.Show(err.Message);
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(strconn);
+
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("select * from Dados where id='" + txtID.Text + "';", conn);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    txtName.Text = reader.GetString("nome");
+                    txtTelefone.Text = reader.GetString("telefone");
+                    txtEmail.Text = reader.GetString("email");
+                    cboSexo.Text = reader.GetString("sexo");
+                }
+
+                conn.Close();
+            }
+
+            catch (Exception err)
+            {
+
+                MessageBox.Show(err.Message);
+            }
+        }
+
+        private void cboSexo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
