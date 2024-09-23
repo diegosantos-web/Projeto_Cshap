@@ -1,3 +1,6 @@
+create database Cadastro_login;
+use Cadastro_login;
+
 
 create table Dados(
 id int primary key not null auto_increment,
